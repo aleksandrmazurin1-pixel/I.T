@@ -4251,13 +4251,13 @@ function changeProgText() {
  get progress() {
     return this.progress;
 }
-    
-   /* set progress(amount) {
-    if (amount < 0 || amount > 100) {
-        return console.log('fuck you');
-    } else {
-        return this.progress;
-    }
+
+/* set progress(amount) {
+ if (amount < 0 || amount > 100) {
+     return console.log('fuck you');
+ } else {
+     return this.progress;
+ }
 }
 
 
@@ -4272,8 +4272,8 @@ function changeProgText() {
 В HTML уже есть:
 html<button id="open-btn">Открыть окно</button>
 <div id="modal" class="hidden">
-    <p>Это модальное окно!</p>
-    <button id="close-btn">Закрыть</button>
+ <p>Это модальное окно!</p>
+ <button id="close-btn">Закрыть</button>
 </div>
 Напиши JS который:
 
@@ -6103,11 +6103,11 @@ async function createTodo(todo) {
         headers: {
             'Content-Type': 'application/json'
         },
-    });    
+    });
     const data = await response.json();
 
     console.log(data);
-} 
+}
 
 
 /*
@@ -6127,20 +6127,20 @@ append.*/
 const list = document.getElementById('list');
 
 async function getRequest() {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const data = await response.json();
-  data.forEach(todo => {
-      todo.title; //Не понимаю, зачем конкретно здесь именно туду-тайтл, если в print(todo) вызывается просто туду?
-      print(todo);
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+    const data = await response.json();
+    data.forEach(todo => {
+        todo.title; //Не понимаю, зачем конкретно здесь именно туду-тайтл, если в print(todo) вызывается просто туду?
+        print(todo);
     });
-  
+
 }
 
 function print(todo) {
-  console.log('ddd')
-  const li = document.createElement('li');
-  li.innerText = todo.title;
-  list.append(li);
+    console.log('ddd')
+    const li = document.createElement('li');
+    li.innerText = todo.title;
+    list.append(li);
 }
 
 getRequest();
@@ -6148,25 +6148,25 @@ getRequest();
 -------
 
 
-let todos = [];
+    let todos = [];
 
 const list = document.getElementById('list');
 
 async function getRequest() {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const data = await response.json();
-  return data;
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+    const data = await response.json();
+    return data;
 }
 
 async function getData() {
-  todos = await getRequest();
-  todos.forEach(todo => print(todo));
+    todos = await getRequest();
+    todos.forEach(todo => print(todo));
 }
 
 function print(todo) {
-  const li = document.createElement('li');
-  li.innerText = todo.title;
-  list.append(li);
+    const li = document.createElement('li');
+    li.innerText = todo.title;
+    list.append(li);
 }
 
 getData();
@@ -6187,22 +6187,23 @@ let todos = [];
 const list = document.getElementById('list');
 
 function getTodos() {
-  fetch('https://jsonplaceholder.typicode.com/todos')
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      data.forEach(todo => print(todo))
-    });
+    fetch('https://jsonplaceholder.typicode.com/todos')
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            data.forEach(todo => print(todo))
+        });
 }
 
 function print(todo) {
-  const li = document.createElement('li');
-  li.innerText = todo.title;
-  list.append(li);
+    const li = document.createElement('li');
+    li.innerText = todo.title;
+    list.append(li);
 }
 
 getTodos()
+
 
 
 /*
@@ -6214,3 +6215,96 @@ init() — async функция, которая вызывает getTodos() че
 Вызови init() в конце.
 Цель задания — почувствовать, что return внутри async функции и await снаружи — это 
 единственный способ "вытащить" данные из асинхронной функции в другую переменную.*/
+let todos = [];
+
+async function getTodos() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data  = await response.json();
+  return data;
+}
+
+async function init() {
+  todos = await getTodos();
+  console.log(todos);
+}
+
+init();
+
+
+
+
+/*
+Задание 5.3 — Promise.all
+Напиши функцию init, которая получает параллельно два списка:
+
+todos: https://jsonplaceholder.typicode.com/todos
+users: https://jsonplaceholder.typicode.com/users
+
+Используй Promise.all — оба запроса должны уйти одновременно. 
+Когда оба вернутся — выведи в консоль сначала todos, потом users.
+Вспомни синтаксис из того кода, который ты изучал в начале этой темы — там было ровно это.
+*/
+
+
+let todos = [];
+let users = [];
+
+async function getAllTodos() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  return data;
+}
+
+
+async function getAllUsers() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const data = await response.json();
+  return data;
+}
+
+function init () { 
+  Promise.all([getAllTodos(), getAllUsers()]).then(values => {
+    [todos, users] = values;
+    console.log(todos);
+    console.log(users);
+  });
+}
+
+init()
+
+
+
+/*
+Задание 6 — PUT/PATCH, обновить поле существующего элемента
+Напиши функцию updateTodo(id), которая отправляет PATCH-запрос на:
+https://jsonplaceholder.typicode.com/todos/${id}
+И обновляет поле completed на true у того todo, чей id ты передаёшь.
+Вызови её с любым id, например updateTodo(5). Выведи ответ сервера в консоль — там должен вернуться 
+обновлённый объект с completed: true.
+Подсказка: PATCH работает так же как POST — второй аргумент fetch с method, body и headers. 
+Разница только в том, что PATCH обновляет часть объекта, а не весь объект целиком.
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

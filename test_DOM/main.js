@@ -1,21 +1,45 @@
+
+
+/*
+Задание 5.3 — Promise.all
+Напиши функцию init, которая получает параллельно два списка:
+
+todos: https://jsonplaceholder.typicode.com/todos
+users: https://jsonplaceholder.typicode.com/users
+
+Используй Promise.all — оба запроса должны уйти одновременно. 
+Когда оба вернутся — выведи в консоль сначала todos, потом users.
+Вспомни синтаксис из того кода, который ты изучал в начале этой темы — там было ровно это.
+*/
+
 let todos = [];
+let users = [];
 
-const list = document.getElementById('list');
-
-function getTodos() {
-  fetch('https://jsonplaceholder.typicode.com/todos')
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      data.forEach(todo => print(todo))
-    });
+async function getAllTodos() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  return data;
 }
 
-function print(todo) {
-  const li = document.createElement('li');
-  li.innerText = todo.title;
-  list.append(li);
+
+async function getAllUsers() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const data = await response.json();
+  return data;
 }
 
-getTodos()
+function init () { 
+  Promise.all([getAllTodos(), getAllUsers()]).then(values => {
+    [todos, users] = values;
+    console.log(todos);
+    console.log(users);
+  });
+}
+
+
+
+
+init()
+
+
+
