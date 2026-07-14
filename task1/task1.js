@@ -4252,7 +4252,7 @@ function changeProgText() {
     return this.progress;
 }
     
-    set progress(amount) {
+   /* set progress(amount) {
     if (amount < 0 || amount > 100) {
         return console.log('fuck you');
     } else {
@@ -6182,4 +6182,35 @@ print можешь оставить тот же что написал выше.
 в цепочке.
 */
 
+let todos = [];
 
+const list = document.getElementById('list');
+
+function getTodos() {
+  fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      data.forEach(todo => print(todo))
+    });
+}
+
+function print(todo) {
+  const li = document.createElement('li');
+  li.innerText = todo.title;
+  list.append(li);
+}
+
+getTodos()
+
+
+/*
+Задание 5.2 — async/await с return, сохранить результат снаружи
+Напиши две функции:
+getTodos() — async функция, которая получает todos и возвращает массив через return.
+init() — async функция, которая вызывает getTodos() через await, сохраняет результат в 
+переменную todos и выводит её в консоль.
+Вызови init() в конце.
+Цель задания — почувствовать, что return внутри async функции и await снаружи — это 
+единственный способ "вытащить" данные из асинхронной функции в другую переменную.*/

@@ -7,15 +7,10 @@ function getTodos() {
     .then(response => {
       return response.json();
     })
-    .then(data => {console.log(data)});
-
+    .then(data => {
+      data.forEach(todo => print(todo))
+    });
 }
-
-function getSmth() {
-  todos = getTodos();
-  todos.forEach(todo => print(todo));
-}
-
 
 function print(todo) {
   const li = document.createElement('li');
@@ -23,4 +18,4 @@ function print(todo) {
   list.append(li);
 }
 
-getSmth();
+getTodos()
