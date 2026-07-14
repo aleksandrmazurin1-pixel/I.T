@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Автопарк</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body class="body">
+  <div class="autopark">
+    <h1 class="autopark__title">Менеджер автопарка</h1>
+    <p class="autopark__subtitle">Управляйте своим автопарком</p>
+    <form class="autopark__form" id="form">
+      <div class="autopark__field">
+        <div class="autopark__field-label">
+          <label for="car-name" class="field__label-name">Название машины</label>
+          <input type="text" id="car-name" placeholder="ВВЕДИТЕ НАЗВАНИЕ">
+        </div>
+        <div class="autopark__field-label">
+          <label for="selector-car" class="field__label-type">Тип машины</label>
+          <select name="type" id="selector-car">
+            <option value="car">Легковая</option>
+            <option value="truck">Грузовая</option>
+          </select>
+        </div>
+        <div class="autopark__field-label">
+          <label for="gas" class="field__label-gas">Топливо (0-100)</label>
+          <input type="number" id="gas" placeholder="50">
+        </div>
+        <button class="autopark__field-button" type="submit"> + Добавить</button>
+      </div>
+    </form>
+    <ul class="autopark__list" id="item-list">
+
+      <li class="autopark__item" id="autopark__item">
+        <div class="autopark__item-header">
+          <h4 class="autopark__item-title">Мерседес</h4>
+          <div class="autopark__item-type label-truck">грузовик</div>
+        </div>
+        <div class="autopark__item-body">
+          <p class="autopark__item-body-subtitle">Топливо</p>
+          <span class="autopark__item-body-persent fuel-text-after50">75%</span>
+        </div>
+        <div class="autopark__item-progress">
+          <div class="autopark__item-progress-bar fuel-after50"></div>
+        </div>
+        <div class="autopark__item-btn">
+          <button class="item__btn-drive">Поехать</button>
+          <button class="item__btn-fuel">Заправить</button>
+          <button class="item__btn-delete">X</button>
+        </div>
+      </li>
+
+      <li class="autopark__item">
+        <div class="autopark__item-header">
+          <h4 class="autopark__item-title">Мерседес</h4>
+          <div class="autopark__item-type label-car">легковая</div>
+        </div>
+        <div class="autopark__item-body">
+          <p class="autopark__item-body-subtitle">Топливо</p>
+          <span class="autopark__item-body-persent fuel-text-after20">75%</span>
+        </div>
+        <div class="autopark__item-progress">
+          <div class="autopark__item-progress-bar fuel-after20"></div>
+        </div>
+        <div class="autopark__item-btn">
+          <button class="item__btn-drive">Поехать</button>
+          <button class="item__btn-fuel">Заправить</button>
+          <button class="item__btn-delete">X</button>
+        </div>
+      </li>
+
+      <li class="autopark__item">
+        <div class="autopark__item-header">
+          <h4 class="autopark__item-title">Мерседес</h4>
+          <div class="autopark__item-type label-truck">грузовик</div>
+        </div>
+        <div class="autopark__item-body">
+          <p class="autopark__item-body-subtitle">Топливо</p>
+          <span class="autopark__item-body-persent fuel-text-after0">75%</span>
+        </div>
+        <div class="autopark__item-progress">
+          <div class="autopark__item-progress-bar fuel-after0"></div>
+        </div>
+        <div class="autopark__item-btn">
+          <button class="item__btn-drive">Поехать</button>
+          <button class="item__btn-fuel">Заправить</button>
+          <button class="item__btn-delete">X</button>
+        </div>
+      </li>
+
+    </ul>
+    <div class="autopark__total-all">
+      <div class="autopark__total">
+        <div class="total__all">Всего машин:</div> 
+        <div class="total__all-nums" id="total-count">3</div>
+      </div>
+      <div class="autopark__total">
+        <div class="total__all">Легковых:</div> 
+        <div class="total__all-nums label-count-car" id="total-count">3</div>
+      </div>
+      <div class="autopark__total">
+        <div class="total__all">Грузовиков:</div> 
+        <div class="total__all-nums label-count-truck" id="total-count">3</div>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RefАвтопарк</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    /* ========================
+       ЗАГОЛОВОК
+    ======================== */
+    .autopark__title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .autopark__subtitle {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-bottom: 32px;
+    }
+
+    /* ========================
+       ФОРМА
+    ======================== */
+    .autopark__form {
+      background: #1e2130;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .autopark__field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .field__label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field__input,
+    .field__select {
+      background: #0f1117;
+      border: 1px solid #2d3348;
+      border-radius: 8px;
+      color: #e2e8f0;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field__input:focus,
+    .field__select:focus {
+      border-color: #3b82f6;
+    }
+
+    .field__input::placeholder {
+      color: #475569;
+    }
+
+    .field__select option {
+      background: #1e2130;
+    }
+
+    .btn-add {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      height: 42px;
+    }
+
+    .btn-add:hover {
+      background: #2563eb;
+    }
+
+    /* ========================
+       СПИСОК МАШИН
+    ======================== */
+    .autopark__list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    /* ========================
+       КАРТОЧКА МАШИНЫ
+    ======================== */
+    .autopark__item {
+      background: #1e2130;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .autopark__item:hover {
+      border-color: #3b82f6;
+    }
+
+    /* Легковая — синяя полоска сверху */
+    .autopark__item--car {
+      border-top: 3px solid #3b82f6;
+    }
+
+    /* Грузовик — оранжевая полоска сверху */
+    .autopark__item--truck {
+      border-top: 3px solid #f59e0b;
+    }
+
+    .autopark__item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .autopark__item-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .autopark__item-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .autopark__item-badge--car {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+    }
+
+    .autopark__item-badge--truck {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+
+    /* ========================
+       ПОЛОСКА ТОПЛИВА
+    ======================== */
+    .autopark__item-fuel {
+      margin-bottom: 16px;
+    }
+
+    .fuel__label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .fuel__value {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .fuel__value--high { color: #22c55e; }
+    .fuel__value--medium { color: #f59e0b; }
+    .fuel__value--low { color: #ef4444; }
+
+    .fuel__track {
+      background: #0f1117;
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .fuel__bar {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.4s ease, background 0.4s ease;
+    }
+
+    .fuel__bar--high { background: #22c55e; }
+    .fuel__bar--medium { background: #f59e0b; }
+    .fuel__bar--low { background: #ef4444; }
+
+    /* ========================
+       КНОПКИ КАРТОЧКИ
+    ======================== */
+    .autopark__item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .item__btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .item__btn:hover {
+      opacity: 0.85;
+    }
+
+    .item__btn-drive {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .item__btn-fuel {
+      background: #22c55e;
+      color: white;
+    }
+
+    .item__btn-delete {
+      background: #ef4444;
+      color: white;
+      flex: 0;
+      padding: 8px 14px;
+    }
+
+    /* ========================
+       СТАТИСТИКА
+    ======================== */
+    .autopark__stats {
+      background: #1e2130;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stats__item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stats__label {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stats__value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .stats__value--blue { color: #60a5fa; }
+    .stats__value--orange { color: #fbbf24; }
+  </style>
+</head>
+<body>
+
+  <div class="autopark">
+
+    <!-- ЗАГОЛОВОК -->
+    <h1 class="autopark__title">🚗 Менеджер автопарка</h1>
+    <p class="autopark__subtitle">Управляй своим автопарком</p>
+
+    <!-- ФОРМА -->
+    <form class="autopark__form" id="form">
+      <div class="autopark__field">
+        <label class="field__label" for="car-name">Название машины</label>
+        <input class="field__input" type="text" id="car-name" placeholder="Например: BMW X5">
+      </div>
+      <div class="autopark__field">
+        <label class="field__label" for="selector-car">Тип машины</label>
+        <select class="field__select" id="selector-car">
+          <option value="car">🚗 Легковая</option>
+          <option value="truck">🚛 Грузовик</option>
+        </select>
+      </div>
+      <div class="autopark__field">
+        <label class="field__label" for="gas">Топливо (0–100)</label>
+        <input class="field__input" type="number" id="gas" placeholder="50" min="0" max="100">
+      </div>
+      <button class="btn-add" type="submit">+ Добавить</button>
+    </form>
+
+    <!-- СПИСОК МАШИН -->
+    <ul class="autopark__list">
+
+      <!-- КАРТОЧКА: ЛЕГКОВАЯ -->
+      <li class="autopark__item autopark__item--car">
+        <div class="autopark__item-header">
+          <h4 class="autopark__item-title">BMW X5</h4>
+          <span class="autopark__item-badge autopark__item-badge--car">Легковая</span>
+        </div>
+        <div class="autopark__item-fuel">
+          <div class="fuel__label">
+            <span>Топливо</span>
+            <span class="fuel__value fuel__value--high">75%</span>
+          </div>
+          <div class="fuel__track">
+            <div class="fuel__bar fuel__bar--high" style="width: 75%"></div>
+          </div>
+        </div>
+        <div class="autopark__item-actions">
+          <button class="item__btn item__btn-drive">Поехать</button>
+          <button class="item__btn item__btn-fuel">Заправить</button>
+          <button class="item__btn item__btn-delete">✕</button>
+        </div>
+      </li>
+
+      <!-- КАРТОЧКА: ГРУЗОВИК -->
+      <li class="autopark__item autopark__item--truck">
+        <div class="autopark__item-header">
+          <h4 class="autopark__item-title">КамАЗ 5490</h4>
+          <span class="autopark__item-badge autopark__item-badge--truck">Грузовик</span>
+        </div>
+        <div class="autopark__item-fuel">
+          <div class="fuel__label">
+            <span>Топливо</span>
+            <span class="fuel__value fuel__value--medium">35%</span>
+          </div>
+          <div class="fuel__track">
+            <div class="fuel__bar fuel__bar--medium" style="width: 35%"></div>
+          </div>
+        </div>
+        <div class="autopark__item-actions">
+          <button class="item__btn item__btn-drive">Поехать</button>
+          <button class="item__btn item__btn-fuel">Заправить</button>
+          <button class="item__btn item__btn-delete">✕</button>
+        </div>
+      </li>
+
+      <!-- КАРТОЧКА: МАЛО ТОПЛИВА -->
+      <li class="autopark__item autopark__item--car">
+        <div class="autopark__item-header">
+          <h4 class="autopark__item-title">Toyota Camry</h4>
+          <span class="autopark__item-badge autopark__item-badge--car">Легковая</span>
+        </div>
+        <div class="autopark__item-fuel">
+          <div class="fuel__label">
+            <span>Топливо</span>
+            <span class="fuel__value fuel__value--low">10%</span>
+          </div>
+          <div class="fuel__track">
+            <div class="fuel__bar fuel__bar--low" style="width: 10%"></div>
+          </div>
+        </div>
+        <div class="autopark__item-actions">
+          <button class="item__btn item__btn-drive">Поехать</button>
+          <button class="item__btn item__btn-fuel">Заправить</button>
+          <button class="item__btn item__btn-delete">✕</button>
+        </div>
+      </li>
+
+    </ul>
+
+    <!-- СТАТИСТИКА -->
+    <div class="autopark__stats">
+      <div class="stats__item">
+        <span class="stats__label">Всего машин</span>
+        <span class="stats__value" id="total-count">3</span>
+      </div>
+      <div class="stats__item">
+        <span class="stats__label">Легковых</span>
+        <span class="stats__value stats__value--blue" id="car-count">2</span>
+      </div>
+      <div class="stats__item">
+        <span class="stats__label">Грузовиков</span>
+        <span class="stats__value stats__value--orange" id="truck-count">1</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
