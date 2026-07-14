@@ -6124,7 +6124,62 @@ html<ul id="list"></ul>
 append.*/
 
 
-Подожди, пожалуйста, а там были задания с промисами? Потому что я особо не помню, как 
-с ними там работать. Давай парочку заданий ещё, может быть, три-четыре включим на промисы, 
-пожалуйста. После этого задания. Если, естественно, их не было в списке, просто я что-то 
-не помню.
+const list = document.getElementById('list');
+
+async function getRequest() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  data.forEach(todo => {
+      todo.title; //Не понимаю, зачем конкретно здесь именно туду-тайтл, если в print(todo) вызывается просто туду?
+      print(todo);
+    });
+  
+}
+
+function print(todo) {
+  console.log('ddd')
+  const li = document.createElement('li');
+  li.innerText = todo.title;
+  list.append(li);
+}
+
+getRequest();
+
+-------
+
+
+let todos = [];
+
+const list = document.getElementById('list');
+
+async function getRequest() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  return data;
+}
+
+async function getData() {
+  todos = await getRequest();
+  todos.forEach(todo => print(todo));
+}
+
+function print(todo) {
+  const li = document.createElement('li');
+  li.innerText = todo.title;
+  list.append(li);
+}
+
+getData();
+
+
+/*
+Задание 5.1 — то же самое через .then, без async/await
+Напиши функцию getTodos, которая получает список todos и для каждого вызывает print(todo) — 
+но без единого async/await, только через цепочку .then.
+print можешь оставить тот же что написал выше.
+Подсказка по направлению: fetch возвращает Promise — значит сразу можно писать .then. 
+Потом response.json() тоже возвращает Promise — значит снова .then. Итого два .then подряд 
+в цепочке.
+*/
+
+

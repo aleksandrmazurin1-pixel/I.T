@@ -1,28 +1,26 @@
+let todos = [];
 
-let categories = [{
-  id: 'cat-1',
-  name: 'Работа',
-  tasks: [{
-    id: 'ts-1',
-    name: 'Написать отчёт',
-  },
-  {
-    id: 'ts-2',
-    name: 'Позвонить клиенту',
-  },]
-},
-{
-  id: 'cat-2',
-  name: 'Учёба',
-  tasks: [{
-    id: 'ts-3',
-    name: 'Прочитать главу',
-  },
-  {
-    id: 'ts-4',
-    name: 'Сделать домашку',
-  },]
-}];
+const list = document.getElementById('list');
+
+function getTodos() {
+  fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {console.log(data)});
+
+}
+
+function getSmth() {
+  todos = getTodos();
+  todos.forEach(todo => print(todo));
+}
 
 
+function print(todo) {
+  const li = document.createElement('li');
+  li.innerText = todo.title;
+  list.append(li);
+}
 
+getSmth();
