@@ -6288,33 +6288,125 @@ https://jsonplaceholder.typicode.com/todos/${id}
 async function updateTodo(id) {
   const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
     method: 'PATCH',
-    body: JSON.stringify(id),
+    body: JSON.stringify({completed: true }),
     headers: {
       'Content-Type': 'application/JSON',
     }
   });
+  const data = await response.json();
+  console.log(data);
+}
 
-  console.log(id)
 
+
+/*
+Задание 6.1 — DELETE-запрос
+Напиши функцию deleteTodo(id), которая отправляет DELETE-запрос на:
+https://jsonplaceholder.typicode.com/todos/${id}
+Выведи в консоль статус ответа — не response.json(), а response.status. 
+Успешное удаление возвращает 200.
+*/
+
+
+
+async function deleteTodo(id) {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    method: 'DELETE',
+  });
+
+  const data = response.status;
+
+  console.log(data);
+}
+
+
+/*
+Задание 6.2 — PUT-запрос, обновить весь объект целиком
+Напиши функцию replaceTodo(id), которая отправляет PUT-запрос на тот же URL с id.
+В отличие от PATCH, PUT заменяет объект целиком — значит в body нужно передать все поля:
+{
+    title: 'Новое название',
+    completed: true,
+    userId: 1
+}
+Выведи ответ сервера в консоль — должен вернуться полный обновлённый объект.
+*/
+
+
+
+async function replaceTodo(id) {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      title: 'Новое название',
+      completed: true,
+      userId: 1
+    }),
+    headers: {
+      'Content-Type': "application/json",
+    }
+  });
+  const data = await response.json();
+
+  console.log(data);
 }
 
 
 
 
+/*
+Задание 7 — получить todos и отрендерить каждый как <li>
+Это уже делал в задании 5 — но теперь усложним. Каждый <li> должен выглядеть так:
+
+текст: title задачи
+если completed: true — добавить класс done на <li> (через li.classList.add('done'))
+если completed: false — класс не добавлять
+
+В CSS добавь:
+.done {
+    text-decoration: line-through;
+    color: gray;
+}
+Получи todos через async/await, пройдись через forEach, для каждого вызови функцию 
+renderTodo(todo) — она создаёт <li> с нужным классом и добавляет в список.
+*/
+
+const list = document.getElementById('list');
+
+let todos = [];
+
+async function getTodos() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  return data;
+}
 
 
+async function getConvert() {
+  todos = await getTodos();
+  console.log(todos);
+  todos.forEach(todo => print(todo)); //Машинально, что нужно писать forEach. Но ты сможешь мне объяснить, почему нужно через forEach мне доставать элементы туда?
+}
 
 
+function print(todo) {
+  console.log(todo.completed)
+  const li = document.createElement('li');
+  li.innerText = todo.title;
 
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
 
+  if (todo.completed === true) {
+    li.classList.add('done');
+    checkbox.checked = true;
+  }
 
+  list.append(li);
+  li.prepend(checkbox);
+}
 
-
-
-
-
-
-
+getConvert()
 
 
 
