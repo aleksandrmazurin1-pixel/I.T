@@ -6273,7 +6273,6 @@ function init () {
 init()
 
 
-
 /*
 Задание 6 — PUT/PATCH, обновить поле существующего элемента
 Напиши функцию updateTodo(id), которая отправляет PATCH-запрос на:
@@ -6284,6 +6283,20 @@ https://jsonplaceholder.typicode.com/todos/${id}
 Подсказка: PATCH работает так же как POST — второй аргумент fetch с method, body и headers. 
 Разница только в том, что PATCH обновляет часть объекта, а не весь объект целиком.
 */
+
+
+async function updateTodo(id) {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(id),
+    headers: {
+      'Content-Type': 'application/JSON',
+    }
+  });
+
+  console.log(id)
+
+}
 
 
 
