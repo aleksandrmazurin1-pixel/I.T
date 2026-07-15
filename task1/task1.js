@@ -6411,5 +6411,94 @@ getConvert()
 
 
 
+/*
+Задание 8 — фильтр, показывать только выполненные
+Используй тот же код из задания 7 — но теперь выводи в список только те todos, у которых completed: true.
+Не меняй функцию print — фильтрацию сделай до того, как передавать данные в forEach. 
+Используй метод массива filter.
+*/
 
 
+const list = document.getElementById('list');
+
+let todos = [];
+
+async function getTodos() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  return data;
+}
+
+
+async function getConvert() {
+  todos = await getTodos();
+  console.log(todos);
+  todos = todos.filter(todo => todo.completed === true);
+  todos.forEach(todo => print(todo));
+}
+
+
+function print(todo) {
+  console.log(todo.completed)
+  const li = document.createElement('li');
+  li.innerText = todo.title;
+
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+
+  if (todo.completed === true) {
+    li.classList.add('done');
+    checkbox.checked = true;
+  }
+
+  list.append(li);
+  li.prepend(checkbox);
+}
+
+getConvert()
+
+
+
+
+/*
+Задание 9 — Promise.all, получить todos и users параллельно
+Получи параллельно два списка — todos и users. Выведи в консоль оба массива.*/
+
+
+let todos = [];
+let users = [];
+
+
+async function getAllTodos() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await response.json();
+  return data;
+}
+
+
+async function getAllUsers() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const data = await response.json();
+  return data;
+}
+
+function getAllTogether() {
+  Promise.all([getAllUsers(), getAllTodos()]).then(values => {
+      [users, todos] = values;
+      console.log(users);
+      console.log(todos);
+    });
+}
+
+getAllTogether();
+
+
+
+
+
+/*
+Задание 10 — связать todos и users
+Получи параллельно todos и users через Promise.all. 
+Для каждого todo найди соответствующего пользователя по userId и выведи в консоль строку вида:
+"Купить молоко — Leanne Graham"
+То есть title задачи и name пользователя рядом.*/
