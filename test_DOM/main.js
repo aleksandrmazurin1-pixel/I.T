@@ -1,46 +1,19 @@
-
 /*
-Задание 12 — форма создания задачи, добавить в DOM без сервера
-В HTML:
-html<form id="form">
-    <input type="text" name="title" placeholder="Название задачи">
-    <button type="submit">Добавить</button>
-</form>
-<ul id="list"></ul>
-Напиши обработчик формы — при сабмите читает значение из инпута, 
-создаёт объект задачи и добавляет новый <li> в список. Никакого fetch — только DOM.
-*/
+Задание 13.2
+Напиши функцию addItem(item), которая:
 
+Читает текущий массив из localStorage
+Добавляет новый элемент в этот массив
+Сохраняет обратно в localStorage
 
+Вызови addItem('яблоко'), потом addItem('банан'), потом addItem('груша') — и проверь что
+ в localStorage лежит массив из трёх элементов.*/
+let arr = [];
 
-let todos = [];
-
-const form = document.getElementById('form');
-const input = document.getElementById('input');
-const list = document.getElementById('list');
-
-
-form.addEventListener('submit', handleSubmit);
-
-function handleSubmit(evt) {
-  evt.preventDefault();
-  if (input.value !== '') {
-    pushTodo(input.value);
-    input.value = '';
+ function addItem(item) {
+   const data = JSON.parse(localStorage.getItem('d'));
+   if (data) {
+    arr = data;
   }
-}
-
-function pushTodo(todo) {
-  todos.push(todo);
-  console.log(todos)
-  todos.forEach(todooo => printTodo(todooo));
-}
-
-function printTodo(todo) {
-  list.innerHTML = '';
-  console.log('fdffdfd')
-  const li = document.createElement('li');
-  li.innerText = todo;
-
-  list.append(li);
-}
+  localStorage.setItem('d', JSON.stringify(item));
+ }

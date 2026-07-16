@@ -6566,3 +6566,78 @@ html<form id="form">
 Напиши обработчик формы — при сабмите читает значение из инпута, 
 создаёт объект задачи и добавляет новый <li> в список. Никакого fetch — только DOM.
 */
+
+
+
+
+let todos = [];
+
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const list = document.getElementById('list');
+
+form.addEventListener('submit', handleSubmit);
+
+parse()
+
+function handleSubmit(evt) {
+  evt.preventDefault();
+  if (input.value !== '') {
+    pushTodo(input.value);
+    input.value = '';
+  }
+}
+
+function pushTodo(todo) {
+  todos.push(todo);
+  localStorage.setItem('Todoss', JSON.stringify(todos))
+  console.log(todos)
+  list.innerHTML = '';
+  todos.forEach(todooo => printTodo(todooo));
+}
+
+function printTodo(todo) {
+  console.log('fdffdfd')
+  const li = document.createElement('li');
+  li.innerText = todo;
+  list.append(li);
+}
+
+
+function parse() {
+  const parse = JSON.parse(localStorage.getItem('Todoss'));
+  if (parse) {
+    todos = parse;
+    todos.forEach(todo => printTodo(todo));
+  }
+}
+
+
+/*Задание 13.1
+Напиши три функции:
+
+save(data) — сохраняет любой массив в localStorage под ключом 'myData'
+load() — читает и возвращает массив из localStorage (с проверкой на null)
+clear() — удаляет ключ 'myData' из localStorage (метод называется removeItem)
+
+Вызови все три по очереди и проверь через консоль.*/
+
+
+function saveData(data) {
+  localStorage.setItem('myData', JSON.stringify(data));
+}
+
+function load() {
+  const data = JSON.parse(localStorage.getItem('myData'))
+  if (data) {
+    return data;
+  }
+}
+
+function clear() {
+  localStorage.removeItem('myData');
+}
+
+
+
+
