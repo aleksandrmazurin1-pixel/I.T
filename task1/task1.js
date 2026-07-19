@@ -6639,5 +6639,58 @@ function clear() {
 }
 
 
+/*
+Задание 13.2
+Напиши функцию addItem(item), которая:
+
+Читает текущий массив из localStorage
+Добавляет новый элемент в этот массив
+Сохраняет обратно в localStorage
+
+Вызови addItem('яблоко'), потом addItem('банан'), потом addItem('груша') — и проверь что
+ в localStorage лежит массив из трёх элементов.*/
+
+let arr = [];
+
+function addItem(item) {
+  const data = JSON.parse(localStorage.getItem('d'));
+  if (data) {
+    arr = data;
+  }
+  arr.push(item);
+  localStorage.setItem('d', JSON.stringify(arr));
+}
+
+addItem('яблоко');
+addItem('банан');
+addItem('груша');
+
+
+
+/*
+Задание 13.3
+Напиши функцию removeItem(item), которая:
+
+Читает массив из localStorage
+Удаляет из него переданный элемент через filter
+Сохраняет обновлённый массив обратно
+
+Проверь: сначала добавь три элемента через addItem из прошлого задания, 
+потом удали один через removeItem и убедись что в localStorage остались два.
+*/
+
+
+
+let arr = [];
+
+function removeItem(item) {
+    const data = JSON.parse(localStorage.getItem('dsd'))
+    if (data) {
+        arr = data;
+    }
+    arr = arr.filter(i => i !== item);
+    localStorage.setItem('dsd', JSON.stringify(arr));
+}
+
 
 
