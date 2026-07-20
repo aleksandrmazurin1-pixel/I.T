@@ -6748,7 +6748,6 @@ updateItem('груша', 'дерево');
 
 
 
-
 /*
 Задание 14
 
@@ -6769,5 +6768,91 @@ updateItem('груша', 'дерево');
 Проверь: добавь три задачи, перезагрузи страницу — все три должны остаться. Удали одну — 
 она должна исчезнуть и не появляться после перезагрузки.
 */
+
+
+let todos = [];
+
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const list = document.getElementById('list');
+
+
+function parse() {
+  const data = JSON.parse(localStorage.getItem('todos'));
+  if (data) {
+    todos = data;
+  }
+  todos.forEach(todo => print(todo));
+}
+
+
+form.addEventListener('submit', handleSubmit);
+
+function handleSubmit(evt) {
+  if (input.value !== "") {
+    evt.preventDefault();
+    todos.push({
+      name: input.value,
+      completed: false
+    });
+    console.log(todos);
+    list.innerText = '';
+    todos.forEach(todo => print(todo));
+    input.value = '';
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }
+}
+
+function print(todo) {
+  const li = document.createElement('li');
+  li.innerText = todo.name;
+
+  const delBtn = document.createElement('button');
+  delBtn.innerText = 'X';
+
+  const status = document.createElement('input');
+  status.type = 'checkbox';
+  console.log(todo.completed);
+  if (todo.completed === true) {
+    li.classList.add('done'); 
+    status.checked = true;
+  } 
+
+  status.addEventListener('click', () => handleStatus(todo, li, status))
+
+  list.append(li);
+  li.append(delBtn);
+  li.prepend(status)
+
+  delBtn.addEventListener('click', () => handleDelBtn(todo, delBtn));
+
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+
+function handleStatus(todo, li, status) {
+  if (todo.completed !== true) {
+    li.classList.add('done');
+    status.checked = true;
+    todo.completed = true;
+  } else {
+    li.classList.remove('done');
+    status.checked = false;
+    todo.completed = false;
+  }
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+
+function handleDelBtn(todo, btn) {
+  todos = todos.filter(item => item !== todo);
+  console.log(todos);
+  btn.parentElement.remove();
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+parse()
+console.log(todos);
+
 
 
