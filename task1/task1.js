@@ -6694,3 +6694,80 @@ function removeItem(item) {
 
 
 
+
+/*
+Задание 13.4
+
+Напиши функцию updateItem(oldItem, newItem), которая:
+
+Читает массив из localStorage
+Находит элемент oldItem и заменяет его на newItem через map
+Сохраняет обновлённый массив обратно
+
+Проверь: добавь 'яблоко', потом замени его на 'арбуз' — в localStorage должен лежать ['арбуз'].
+*/
+
+
+let arr = [];
+
+
+function addItem(item) {
+  const data = JSON.parse(localStorage.getItem('q'));
+  if (data) {
+    arr = data;
+  }
+  arr.push(item);
+  localStorage.setItem('q', JSON.stringify(arr));
+}
+
+function updateItem(oldItem, newItem) {
+  const data = JSON.parse(localStorage.getItem('q'));
+  if (data) {
+    arr = data;
+  }
+
+  arr = arr.map(item => {
+    if (item === oldItem) {
+      return newItem;
+    } else {
+      return item;
+    }
+  });
+
+  localStorage.setItem('q', JSON.stringify(arr))
+}
+
+
+addItem('яблоко');
+addItem('банагн');
+addItem('груша');
+
+updateItem('груша', 'дерево');
+
+
+
+
+
+
+/*
+Задание 14
+
+Напиши приложение с нуля, которое умеет:
+
+Из задания 13:
+
+Форма с инпутом и кнопкой "Добавить"
+При сабмите — добавляет задачу в массив todos, рисует <li> в списке, сохраняет в localStorage
+При загрузке страницы — восстанавливает todos из localStorage и рисует список
+
+Новое в задании 14:
+
+У каждого <li> есть кнопка "Удалить"
+При клике — удаляет элемент из DOM, из массива todos через filter, сохраняет обновлённый 
+массив в localStorage
+
+Проверь: добавь три задачи, перезагрузи страницу — все три должны остаться. Удали одну — 
+она должна исчезнуть и не появляться после перезагрузки.
+*/
+
+
