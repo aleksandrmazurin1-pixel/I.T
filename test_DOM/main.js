@@ -40,9 +40,39 @@ async function getAllUsers() {
   return data;
 }
 
+async function setTodo(todo) {
+  const resp = await fetch('https://jsonplaceholder.typicode.com/todos', {
+    method: 'POST',
+    body: JSON.stringify(todo),
+    headers: {
+      'Content-type': 'application/json'
+    }
+  });
+  const data = resp.json();
+  console.log(data);
+  return data;
+}
+
+
+
+
+function initAll() {
+  Promise.all([getAllTodos(), getAllUsers()])
+    .then(values => {
+    [todos, users] = values;
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      addTodo();
+    });
+
+    users.forEach(user => addOption(user));
+    todos.forEach(todo => display(todo));
+  });
+}
+
+
 function addTodo() {
   if (input.value !== '') {
-    console.log('ddd')
     todos.push({
       userId: selector.value,
       id: crypto.randomUUID(),
@@ -50,10 +80,9 @@ function addTodo() {
       completed: false
     });
     input.value = '';
-    console.log(todos)
-    console.log(users)
-    display(); 
+    todos.forEach(todo => display(todo));
   }
+  setTodo();
 }
 
 function addOption(user) {
@@ -63,22 +92,9 @@ function addOption(user) {
   console.log(selector.value)
 }
 
-function initAll() {
-  Promise.all([getAllTodos(), getAllUsers()]).then(values => {
-    [todos, users] = values;
-    form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      addTodo();
-    });
-    addTodo();
-    users.forEach(user => addOption(user));
-    todos.forEach(todo => display(todo));
-  });
-}
-
-
 
 function display(todo) {
+
   const li = document.createElement('li');
   li.innerText = todo.title;
 
@@ -86,10 +102,35 @@ function display(todo) {
   delBtn.innerText = 'X';
 
   const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+
+  if (todo.completed === true) {
+    li.classList.add('done');
+    checkbox.checked = true;
+  } else {
+    li.classList.remove('done');
+    checkbox.checked = false;
+  }
+
+  checkbox.addEventListener('click', () => changeCheck(todo, li, checkbox))
+
   list.prepend(li);
   li.append(delBtn);
+  li.prepend(checkbox)
 }
 
+
+function changeCheck(todo, li, checkbox) {
+  if (todo.completed !== true) {
+    li.classList.add('done');
+    checkbox.checked = true;
+    todo.completed = true;
+  } else {
+    li.classList.remove('done');
+    checkbox.checked = false;
+    todo.completed = false;
+  }
+}
 
 
 initAll()
