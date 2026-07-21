@@ -18,6 +18,7 @@
 потом формы и кнопки. Не пытайся написать всё сразу.
 */
 
+
 let todos = [];
 let users = [];
 
@@ -39,42 +40,56 @@ async function getAllUsers() {
   return data;
 }
 
+function addTodo() {
+  if (input.value !== '') {
+    console.log('ddd')
+    todos.push({
+      userId: selector.value,
+      id: crypto.randomUUID(),
+      title: input.value,
+      completed: false
+    });
+    input.value = '';
+    console.log(todos)
+    console.log(users)
+    display(); 
+  }
+}
+
+function addOption(user) {
+  const opt = document.createElement('option')
+  opt.innerText = user.name;
+  selector.append(opt);
+  console.log(selector.value)
+}
+
 function initAll() {
   Promise.all([getAllTodos(), getAllUsers()]).then(values => {
     [todos, users] = values;
-    console.log(todos);
-    
-    form.addEventListener('submit', handleSubmit());
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      addTodo();
+    });
+    addTodo();
+    users.forEach(user => addOption(user));
     todos.forEach(todo => display(todo));
   });
 }
 
-function handleSubmit(evt) {
-  evt.preventDefault();
-  if (input.value !== '') {
-    todos.push({
-      userId: id,
-      id: crypto.randomUUID(),
-      title: input.value
-    });
-    input.value = '';
-  }
-}
+
 
 function display(todo) {
-  console.log(todo)
+  const li = document.createElement('li');
+  li.innerText = todo.title;
+
+  const delBtn = document.createElement('button');
+  delBtn.innerText = 'X';
+
+  const checkbox = document.createElement('input');
+  list.prepend(li);
+  li.append(delBtn);
 }
 
+
+
 initAll()
-
-
-
-
-
-
-
-
-
-
-getAllTodos()
-getAllUsers()
