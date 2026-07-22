@@ -28,6 +28,17 @@ const list = document.getElementById('list');
 const selector = document.getElementById('selector');
 
 
+
+function parse() {
+  const data = JSON.parse(localStorage.getItem('todooos'));
+  if (data) {
+    todos = data;
+  }
+  todos.forEach(todo => display(todo));
+}
+
+
+
 async function getAllTodos() {
   const resp = await fetch('https://jsonplaceholder.typicode.com/todos');
   const data = await resp.json()
@@ -53,21 +64,20 @@ async function setTodo(todo) {
   return data;
 }
 
-
-
-
 function initAll() {
   Promise.all([getAllTodos(), getAllUsers()])
     .then(values => {
-    [todos, users] = values;
-    form.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      addTodo();
-    });
+      [todos, users] = values;
+      form.addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        addTodo();
+      });
 
-    users.forEach(user => addOption(user));
-    todos.forEach(todo => display(todo));
-  });
+      users.forEach(user => addOption(user));
+      todos.forEach(todo => display(todo));
+
+      localStorage.setItem('todooos', JSON.stringify(todos));
+    });
 }
 
 
@@ -83,13 +93,15 @@ function addTodo() {
     todos.forEach(todo => display(todo));
   }
   setTodo();
+  localStorage.setItem('todooos', JSON.stringify(todos));
 }
 
 function addOption(user) {
   const opt = document.createElement('option')
   opt.innerText = user.name;
   selector.append(opt);
-  console.log(selector.value)
+  console.log(selector.value);
+  localStorage.setItem('todooos', JSON.stringify(todos));
 }
 
 
@@ -112,13 +124,24 @@ function display(todo) {
     checkbox.checked = false;
   }
 
-  checkbox.addEventListener('click', () => changeCheck(todo, li, checkbox))
+  checkbox.addEventListener('click', () => changeCheck(todo, li, checkbox));
+
+  delBtn.addEventListener('click', () => handleDelBtn(todo, li))
 
   list.prepend(li);
   li.append(delBtn);
-  li.prepend(checkbox)
+  li.prepend(checkbox);
+
+  console.log(todo)
+  localStorage.setItem('todooos', JSON.stringify(todos));
 }
 
+
+function handleDelBtn(todo, li) {
+  todos = todos.filter(too => too !== todo);
+  li.remove();
+  localStorage.setItem('todooos', JSON.stringify(todos));
+}
 
 function changeCheck(todo, li, checkbox) {
   if (todo.completed !== true) {
@@ -130,7 +153,9 @@ function changeCheck(todo, li, checkbox) {
     checkbox.checked = false;
     todo.completed = false;
   }
+  localStorage.setItem('todooos', JSON.stringify(todos));
 }
 
 
-initAll()
+initAll();
+
